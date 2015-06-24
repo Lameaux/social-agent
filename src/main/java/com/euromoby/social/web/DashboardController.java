@@ -5,16 +5,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class WebController {
-
+public class DashboardController implements AgentController {
+	
     @RequestMapping("/")
-    public String list(ModelMap model) {
-        return "list";
+    public String dashboard(ModelMap model) {
+    	model.put(MENU_ACTIVE, "dashboard");
+    	model.put(PAGE_TITLE, "Dashboard");
+        return "dashboard";
     }	
-
-    @RequestMapping("/edit")
-    public String edit(ModelMap model) {
-        return "edit";
-    }    
     
 }
