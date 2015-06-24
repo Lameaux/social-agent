@@ -1,15 +1,22 @@
 package com.euromoby.social.core.mail.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
 public class MailAccount {
 
 	private Integer id;
+
+    @NotNull(message="You must enter a value")
+    @Size(min=3, message="You must enter 3 characters")    
 	private String login;
-	private String domain;
+    
+    @NotNull(message="You must enter a value")
+    @Size(min=3, message="You must enter 3 characters")
+    private String domain;
+    
 	private boolean active;
-
-	public MailAccount() {
-
-	}
 
 	public Integer getId() {
 		return id;

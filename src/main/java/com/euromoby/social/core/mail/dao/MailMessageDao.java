@@ -50,7 +50,7 @@ public class MailMessageDao {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update("insert into mail_message(account_id, sender, size, created) values (?,?,?,?)", mailMessage.getAccountId(),
 				mailMessage.getSender(), mailMessage.getSize(), mailMessage.getCreated());
-		mailMessage.setId(jdbcTemplate.queryForObject("select scope_identity()", Integer.class));
+		mailMessage.setId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class));
 	}
 
 	public void deleteById(Integer id) {

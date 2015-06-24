@@ -1,18 +1,22 @@
 <h1>Create new email</h1>
 
-<form class="form-inline">
+<form class="form-inline" method="post">
+#springBind("mail_account")
   <div class="form-group">
-    <label class="sr-only" for="exampleInputEmail3">Email address</label>
-    <input type="text" class="form-control" id="emailUser" name="user" placeholder="user">
+    <label class="sr-only" for="emailUser">User</label>
+	#springBind("mail_account.login")    
+    <input type="text" class="form-control" id="emailDomain" name="${status.expression}" value="$!status.value" placeholder="user">
   </div>
   @
   <div class="form-group">
-    <label class="sr-only" for="exampleInputPassword3">Password</label>
-    <input type="text" class="form-control" id="emailDomain" name="domain" placeholder="example.com">
+    <label class="sr-only" for="emailDomain">Domain</label>
+	#springBind("mail_account.domain")    
+    <input type="text" class="form-control" id="emailDomain" name="${status.expression}" value="$!status.value" placeholder="example.com">
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" checked> Active
+	#springBind("mail_account.active")
+      <input type="checkbox" name="${status.expression}" value="true" #if("$!{status.value}"=="true") checked="checked"#end> Active
     </label>
   </div>
   <button type="submit" class="btn btn-default">Create</button>

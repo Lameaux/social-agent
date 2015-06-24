@@ -3,9 +3,7 @@
 -- DROP TABLE IF EXISTS mail_message;
 -- DROP TABLE IF EXISTS twitter_account;
 -- DROP TABLE IF EXISTS twitter_message;
--- DROP TABLE IF EXISTS download_file;
--- DROP INDEX IF EXISTS download_file_unique;
--- DROP INDEX IF EXISTS download_file_location;
+
 
 CREATE TABLE IF NOT EXISTS mail_account (
 	id INT auto_increment PRIMARY KEY, 
@@ -13,7 +11,7 @@ CREATE TABLE IF NOT EXISTS mail_account (
 	domain VARCHAR(255),
 	active INT DEFAULT 1
 );
-CREATE UNIQUE INDEX IF NOT EXISTS mail_account_unique 
+CREATE UNIQUE INDEX mail_account_unique 
 ON mail_account(login, domain);
 
 CREATE TABLE IF NOT EXISTS mail_message (

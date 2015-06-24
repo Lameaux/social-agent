@@ -41,7 +41,7 @@ public class MailAccountDao {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update("insert into mail_account(login, domain, active) values (?,?,?)", mailAccount.getLogin(), mailAccount.getDomain(),
 				mailAccount.getActive() ? 1 : 0);
-		mailAccount.setId(jdbcTemplate.queryForObject("select scope_identity()", Integer.class));
+		mailAccount.setId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class));
 
 	}
 
