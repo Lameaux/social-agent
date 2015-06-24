@@ -1,1 +1,22 @@
 <h1>Twitter Accounts</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Screen name</th>
+			<th>Title</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($account in $accounts)
+		<tr>
+			<td>${account.id}</td>
+			<td>${account.screenName}</td>
+			<td>title</td>
+			<td>Delete</td>
+		</tr>
+		#end
+	</tbody>
+</table>
