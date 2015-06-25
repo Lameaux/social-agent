@@ -1,7 +1,22 @@
 <h1>Create new email</h1>
 
-<form class="form-inline" method="post">
 #springBind("mail_account")
+<form class="form-inline" method="post">
+
+#if($status.errors.hasErrors())
+    ## Global error messages
+    #foreach($e in $status.errorMessages)
+        <p>${e}</p>
+    #end
+    ## Field error messages
+    #foreach($f in $status.errors.fieldErrors)
+        #springBind("mail_account.${f.field}")
+        #foreach($e in $status.errorMessages)
+            <p>${e}</p>
+        #end
+    #end
+#end
+
   <div class="form-group">
     <label class="sr-only" for="emailUser">User</label>
 	#springBind("mail_account.login")    

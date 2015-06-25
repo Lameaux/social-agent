@@ -39,6 +39,11 @@ public class EmailController implements AgentController {
 
     @RequestMapping(value="/email/add", method=RequestMethod.POST)
     public String addNewEmailSubmit(@Valid @ModelAttribute("mail_account") MailAccount mailAccount, BindingResult result, ModelMap model) {
+    	
+    	if (!result.hasErrors()) {
+    		return "redirect:/email";
+    	}
+    	
     	model.put(MENU_ACTIVE, "email");
     	model.put(PAGE_TITLE, "Create new email");
     	model.put("mail_account", mailAccount);
