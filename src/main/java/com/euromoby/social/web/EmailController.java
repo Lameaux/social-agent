@@ -17,14 +17,14 @@ import com.euromoby.social.core.mail.model.MailAccount;
 public class EmailController implements AgentController {
 
 	@Autowired
-	private MailManager emailService;	
+	private MailManager mailManager;	
 	
     @RequestMapping("/email")
     public String email(ModelMap model) {
     	model.put(MENU_ACTIVE, "email");
     	model.put(PAGE_TITLE, "Manage Emails");
     	
-    	model.put("emails", emailService.getAccounts());    	
+    	model.put("emails", mailManager.getAccounts());    	
     	
     	return "email";
     }     
@@ -41,6 +41,7 @@ public class EmailController implements AgentController {
     public String addNewEmailSubmit(@Valid @ModelAttribute("mail_account") MailAccount mailAccount, BindingResult result, ModelMap model) {
     	
     	if (!result.hasErrors()) {
+    		mailManager.saveAccount(mailAccount);
     		return "redirect:/email";
     	}
     	

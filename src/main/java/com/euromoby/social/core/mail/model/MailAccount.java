@@ -1,7 +1,7 @@
 package com.euromoby.social.core.mail.model;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 public class MailAccount {
@@ -9,11 +9,11 @@ public class MailAccount {
 	private Integer id;
 
     @NotNull(message="Login is empty")
-    @Min(value=3, message="Login should be at least 3 characters")
+    @Size(min=3, max=255, message="Login should be 3-255 characters")
 	private String login;
     
     @NotNull(message="Domain is empty")
-    @Min(value=3, message="Domain should be at least 3 characters")
+    @Size(min=3, max=255, message="Domain should be 3-255 characters")
     private String domain;
     
 	private boolean active;
