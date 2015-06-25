@@ -14,6 +14,17 @@
 	
 	<context:property-placeholder location="classpath:/com/euromoby/social/db.properties"/>
 
+	<bean id="config" class="com.euromoby.social.core.Config">
+		<property name="serverTimeout" value="30" />
+		<property name="mailHost" value="euromoby.com" />
+		<property name="mailStoragePath" value="mailstorage" />
+		<property name="autorunServices">
+			<list>
+				<value>mail</value>
+			</list>
+		</property>
+	</bean>
+
     <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
  
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -27,7 +38,7 @@
 		<property name="user" value="${db.user}" />
 		<property name="password" value="${db.password}" />
 		<!-- pool sizing -->
-		<property name="initialPoolSize" value="3" />
+		<property name="initialPoolSize" value="6" />
 		<property name="minPoolSize" value="6" />
 		<property name="maxPoolSize" value="25" />
 		<property name="acquireIncrement" value="3" />

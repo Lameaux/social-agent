@@ -1,4 +1,4 @@
-package com.euromoby.social.core.model;
+package com.euromoby.social.core.twitter.model;
 
 public class TwitterAccount {
 

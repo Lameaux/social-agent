@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.euromoby.social.core.service.TwitterService;
+import com.euromoby.social.core.twitter.TwitterManager;
 
 @Controller
 public class TwitterController implements AgentController {
 
 	@Autowired
-	private TwitterService twitterService;
+	private TwitterManager twitterService;
 	
     @RequestMapping("/twitter")
     public String manageAccounts(ModelMap model) {

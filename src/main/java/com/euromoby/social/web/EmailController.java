@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.euromoby.social.core.mail.MailManager;
 import com.euromoby.social.core.mail.model.MailAccount;
-import com.euromoby.social.core.mail.service.MailService;
 
 @Controller
 public class EmailController implements AgentController {
 
 	@Autowired
-	private MailService emailService;	
+	private MailManager emailService;	
 	
     @RequestMapping("/email")
     public String email(ModelMap model) {
