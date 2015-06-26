@@ -33,6 +33,17 @@ CREATE TABLE IF NOT EXISTS twitter_account (
 	access_token_secret VARCHAR(255)	
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS twitter_group (
+	id INT auto_increment PRIMARY KEY, 
+	title VARCHAR(255)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS twitter_account_in_group (
+	account_id VARCHAR(20),
+	group_id INT, 
+	primary key(account_id, group_id)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS twitter_message (
 	id INT auto_increment PRIMARY KEY,
 	account_id VARCHAR(20), 

@@ -30,7 +30,7 @@ public class TwitterAccountDao {
 	public TwitterAccount findById(String id) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try {
-			return jdbcTemplate.queryForObject("select * from twitter_account where id = ?", ROW_MAPPER, id);
+			return jdbcTemplate.queryForObject("select * from twitter_account where id = ? order by screen_name", ROW_MAPPER, id);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

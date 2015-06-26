@@ -70,14 +70,7 @@ public class TwitterController implements AgentController {
     	model.put("twitter", twitterAccount);
     	return "twitter_profile";
     }    
-    
-    @RequestMapping("/twitter/groups")
-    public String manageGroups(ModelMap model) {
-    	model.put(MENU_ACTIVE, "twitter");
-    	model.put(PAGE_TITLE, "Twitter Groups");
-    	
-    	return "twitter_groups";
-    }    
+ 
 
     @RequestMapping("/twitter/connect")
     public String connectTwitterAccount(ModelMap model) throws Exception {

@@ -1,1 +1,26 @@
 <h1>Twitter Groups</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Title</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($group in $groups)
+		<tr>
+			<td>${group.id}</td>
+			<td>${group.title}</td>
+			<td>
+				<a href="/twitter/groups/${group.id}/accounts" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Accounts</a>
+				<a href="/twitter/groups/${group.id}/edit" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a>
+				<a href="/twitter/groups/${group.id}/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Delete</a>
+
+
+			</td>
+		</tr>
+		#end
+	</tbody>
+</table>

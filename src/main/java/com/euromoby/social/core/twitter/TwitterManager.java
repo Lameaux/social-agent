@@ -10,30 +10,41 @@ import org.springframework.transaction.annotation.Transactional;
 import twitter4j.auth.AccessToken;
 
 import com.euromoby.social.core.twitter.dao.TwitterAccountDao;
+import com.euromoby.social.core.twitter.dao.TwitterGroupDao;
 import com.euromoby.social.core.twitter.dao.TwitterMessageDao;
 import com.euromoby.social.core.twitter.model.TwitterAccount;
+import com.euromoby.social.core.twitter.model.TwitterGroup;
 import com.euromoby.social.core.twitter.model.TwitterMessage;
 
 @Component
 public class TwitterManager {
 
-	private TwitterAccountDao twitterAccountDao;
-	private TwitterMessageDao twitterMessageDao;
-	
 	@Autowired
-	public TwitterManager(TwitterAccountDao twitterAccountDao, TwitterMessageDao twitterMessageDao) {
-		this.twitterAccountDao = twitterAccountDao;
-		this.twitterMessageDao = twitterMessageDao;
-	}
+	private TwitterAccountDao twitterAccountDao;
+	@Autowired
+	private TwitterMessageDao twitterMessageDao;
+	@Autowired
+	private TwitterGroupDao twitterGroupDao;	
+	
 
 	@Transactional(readOnly=true)	
 	public List<TwitterAccount> getAccounts() {
 		return twitterAccountDao.findAll();
 	}	
+
+	@Transactional(readOnly=true)	
+	public List<TwitterGroup> getGroups() {
+		return twitterGroupDao.findAll();
+	}	
 	
 	@Transactional(readOnly=true)
 	public TwitterAccount getAccountById(String id) {
 		return twitterAccountDao.findById(id);
+	}	
+
+	@Transactional(readOnly=true)
+	public TwitterGroup getGroupById(Integer id) {
+		return twitterGroupDao.findById(id);
 	}	
 	
 	@Transactional
@@ -41,6 +52,17 @@ public class TwitterManager {
 		twitterAccountDao.update(twitterAccount);
 	}
 
+	@Transactional
+	public void saveGroup(TwitterGroup twitterGroup) {
+		twitterGroupDao.save(twitterGroup);
+	}	
+
+	@Transactional
+	public void updateGroup(TwitterGroup twitterGroup) {
+		twitterGroupDao.update(twitterGroup);
+	}	
+	
+	
 	@Transactional	
 	public TwitterAccount saveAccessToken(AccessToken accessToken) {
 		String userId = String.valueOf(accessToken.getUserId());

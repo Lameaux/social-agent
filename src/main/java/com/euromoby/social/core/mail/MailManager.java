@@ -80,6 +80,7 @@ public class MailManager {
 		return mailMessageDao.findByAccountId(accountId);
 	}
 
+	@Transactional	
 	public void deleteMessage(Integer accountId, Integer messageId) {
 		MailAccount account = mailAccountDao.findById(accountId);
 		if (account == null) {
@@ -97,6 +98,7 @@ public class MailManager {
 		
 	}
 	
+	@Transactional	
 	public void saveMessage(MailSession mailSession) {
 		Tuple<String, String> recipient = mailSession.getRecipient();
 		
