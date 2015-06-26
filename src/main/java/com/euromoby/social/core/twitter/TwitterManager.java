@@ -42,7 +42,7 @@ public class TwitterManager {
 	}
 
 	@Transactional	
-	public void saveAccessToken(AccessToken accessToken) {
+	public TwitterAccount saveAccessToken(AccessToken accessToken) {
 		String userId = String.valueOf(accessToken.getUserId());
 		TwitterAccount account = twitterAccountDao.findById(userId);
 		if (account == null) {
@@ -59,6 +59,7 @@ public class TwitterManager {
 			account.setAccessTokenSecret(accessToken.getTokenSecret());
 			twitterAccountDao.update(account);
 		}
+		return account;
 	}
 
 	@Transactional
