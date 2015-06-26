@@ -2,21 +2,17 @@ package com.euromoby.social.core.twitter.model;
 
 public class TwitterAccount {
 
-	private int id;
+	private String id;
 	private String screenName;
-	private String secret1;
-	private String secret2;
+	private String description;
+	private String accessToken;
+	private String accessTokenSecret;
 
-	public TwitterAccount(int id, String screenName) {
-		this.id = id;
-		this.screenName = screenName;
-	}
-
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -26,6 +22,30 @@ public class TwitterAccount {
 
 	public void setScreenName(String screenName) {
 		this.screenName = screenName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getAccessTokenSecret() {
+		return accessTokenSecret;
+	}
+
+	public void setAccessTokenSecret(String accessTokenSecret) {
+		this.accessTokenSecret = accessTokenSecret;
 	}
 
 }

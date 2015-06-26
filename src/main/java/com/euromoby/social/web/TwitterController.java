@@ -11,14 +11,14 @@ import com.euromoby.social.core.twitter.TwitterManager;
 public class TwitterController implements AgentController {
 
 	@Autowired
-	private TwitterManager twitterService;
+	private TwitterManager twitterManager;
 	
     @RequestMapping("/twitter")
     public String manageAccounts(ModelMap model) {
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Twitter Accounts");
     	
-    	model.put("accounts", twitterService.getAccounts());
+    	model.put("accounts", twitterManager.getAccounts());
     	
     	return "twitter_accounts";
     }    

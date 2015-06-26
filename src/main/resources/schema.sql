@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS mail_message (
 CREATE TABLE IF NOT EXISTS twitter_account (
 	id VARCHAR(20) PRIMARY KEY, 
 	screen_name VARCHAR(255),
-	tags VARCHAR(255),
+	description VARCHAR(255),
 	access_token VARCHAR(255),
 	access_token_secret VARCHAR(255)	
 ) ENGINE=InnoDB;

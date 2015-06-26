@@ -18,6 +18,14 @@
 		<property name="serverTimeout" value="${mail.timeout}" />
 		<property name="mailHost" value="${mail.host}" />
 		<property name="mailStoragePath" value="${mail.storage}" />
+		
+		<property name="clientTimeout" value="${twitter.timeout}" />
+		<property name="proxyHost" value="${twitter.proxy.host}" />
+		<property name="proxyPort" value="${twitter.proxy.port}" />
+
+		<property name="twitterKey" value="${twitter.key}" />
+		<property name="twitterSecret" value="${twitter.secret}" />								
+
 		<property name="autorunServices">
 			<list>
 				<value>mail</value>
