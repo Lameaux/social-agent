@@ -1,10 +1,28 @@
-<h1>Inbox</h1>
+<h1>Inbox (${messages.size()})</h1>
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    #if($selectedAccount)
+		${selectedAccount.login}@${selectedAccount.domain}
+    #else
+    	All active emails
+    #end
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="/email/inbox">All active emails</a></li>
+	<li role="separator" class="divider"></li> 
+	#foreach($account in $accounts)   
+    	<li><a href="/email/inbox/$account.id">${account.login}@${account.domain}</a></li>
+    #end
+  </ul>
+</div>
 
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>Sender</th>
-			<th>Recipient</th>
+			<th>#</th>
+			<th>From</th>
 			<th>Subject</th>
 			<th>Date</th>
 			<th>Size</th>						
@@ -14,14 +32,14 @@
 	<tbody>
 		#foreach($message in $messages)
 		<tr>
+			<td>${message.id}</td>
 			<td>${message.sender}</td>
-			<td>${message.accountId}</td>
 			<td>${message.subject}</td>
-			<td>${message.created}</td>
-			<td>${message.size}</td>												
+			<td>$date.format('yyyy-MM-dd HH:mm:ss', $message.created)</td>
+			<td>$math.roundTo(1, $math.div($message.size, 1024)) kb</td>												
 			<td>
-				<a href="/email/inbox/view/${email.id}" class="btn btn-primary"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> View</a> 
-				<a href="/email/inbox/delete/${email.id}" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+				<a href="/email/inbox/view/$message.accountId/${message.id}" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> View</a> 
+				<a onclick="return confirm('Delete message $message.id ?');" href="/email/inbox/delete/$message.accountId/${message.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
 			</td>
 		</tr>
 		#end

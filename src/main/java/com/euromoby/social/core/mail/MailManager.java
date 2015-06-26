@@ -3,10 +3,9 @@ package com.euromoby.social.core.mail;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.mail.util.MimeMessageParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +66,11 @@ public class MailManager {
 	}
 
 	@Transactional(readOnly=true)	
+	public List<MailAccount> getActiveAccounts() {
+		return mailAccountDao.findActive();
+	}	
+	
+	@Transactional(readOnly=true)	
 	public List<MailMessage> getMessages() {
 		return mailMessageDao.findAll();
 	}	
@@ -76,12 +80,16 @@ public class MailManager {
 		return mailMessageDao.findByAccountId(accountId);
 	}
 
-	@Transactional(readOnly=true)	
-	public void deleteMessage(Tuple<String, String> loginDomain, MailMessage mailMessage) {
-		mailMessageDao.deleteById(mailMessage.getId());
-		
+	public void deleteMessage(Integer accountId, Integer messageId) {
+		MailAccount account = mailAccountDao.findById(accountId);
+		if (account == null) {
+			log.error("Account {} not found", accountId);
+			return;
+		}
+
+		mailMessageDao.deleteById(messageId);
 		try {
-			File targetFile = mailFileProvider.getMessageFile(loginDomain, mailMessage.getId());
+			File targetFile = mailFileProvider.getMessageFile(Tuple.of(account.getLogin(), account.getDomain()), messageId);
 			targetFile.delete();
 		} catch (Exception e) {
 			log.error("Internal Error", e);
@@ -92,16 +100,23 @@ public class MailManager {
 	public void saveMessage(MailSession mailSession) {
 		Tuple<String, String> recipient = mailSession.getRecipient();
 		
-		MailAccount account = mailAccountDao.findByLoginAndDomain(recipient.getFirst(), recipient.getSecond());
-		MailMessage mailMessage = new MailMessage();
-		mailMessage.setAccountId(account.getId());
-		mailMessage.setSender(mailSession.getSender().joinString("@"));
-		mailMessage.setSize(mailSession.getRealMailSize());
-		mailMessage.setCreated(new Date());
-		mailMessage.setSubject(getSubjectFromHeaders(mailSession.getHeaders()));
-		mailMessageDao.save(mailMessage);
+		MailMessageFileReader messageReader = new MailMessageFileReader(mailSession.getTempFile());
+		MimeMessageParser parser = messageReader.parseMessage();
+		if (parser == null) {
+			log.error("Error parsing message");
+			return;
+		}		
 		
 		try {
+			MailAccount account = mailAccountDao.findByLoginAndDomain(recipient.getFirst(), recipient.getSecond());
+			MailMessage mailMessage = new MailMessage();
+			mailMessage.setAccountId(account.getId());
+			mailMessage.setSender(mailSession.getSender().joinString("@"));
+			mailMessage.setSize(mailSession.getRealMailSize());
+			mailMessage.setCreated(new Date());
+			mailMessage.setSubject(parser.getSubject());
+			mailMessageDao.save(mailMessage);
+			
 			File targetFile = mailFileProvider.getMessageFile(recipient, mailMessage.getId());
 			FileUtils.copyFile(mailSession.getTempFile(), targetFile);
 		} catch (Exception e) {
@@ -109,16 +124,20 @@ public class MailManager {
 		}
 
 	}
-
-	private String getSubjectFromHeaders(List<String> headers) {
-		Pattern re = Pattern.compile("^Subject:(.*)$", Pattern.CASE_INSENSITIVE);
-		for (String header : headers) {
-			Matcher m = re.matcher(header);
-			if (m.matches()) {
-				return m.group(1);
-			}
+	
+	@Transactional(readOnly=true)		
+	public File getMessageFile(Integer accountId, Integer messageId) {
+		
+		MailAccount account = mailAccountDao.findById(accountId);
+		if (account == null) {
+			return null;
 		}
-		return "No subject";
+		
+		try {
+			return mailFileProvider.getMessageFile(Tuple.of(account.getLogin(), account.getDomain()), messageId);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 }

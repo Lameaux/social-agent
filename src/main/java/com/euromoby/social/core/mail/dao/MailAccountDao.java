@@ -43,9 +43,14 @@ public class MailAccountDao {
 
 	public List<MailAccount> findAll() {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		return jdbcTemplate.query("select * from mail_account order by domain, login", ROW_MAPPER);
+		return jdbcTemplate.query("select * from mail_account order by active desc, domain asc, login asc", ROW_MAPPER);
 	}
 
+	public List<MailAccount> findActive() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.query("select * from mail_account where active = '1' order by domain, login", ROW_MAPPER);
+	}
+	
 	public void save(MailAccount mailAccount) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update("insert into mail_account(login, domain, active) values (?,?,?)", mailAccount.getLogin(), mailAccount.getDomain(),

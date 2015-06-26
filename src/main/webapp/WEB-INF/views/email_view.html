@@ -1,0 +1,8 @@
+<h1>#${message.id} - $message.subject</h1>
+<div>
+<p>From: ${message.sender}</p>
+<p>Date: $date.format('yyyy-MM-dd HH:mm:ss', $message.created)</p>
+<p>Size: $math.roundTo(1, $math.div($message.size, 1024)) kb</p>
+</div>
+<div>$message_body</div>
+
