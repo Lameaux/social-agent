@@ -41,6 +41,11 @@ public class MailMessageDao {
 		}
 	}
 
+	public List<MailMessage> findAll() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.query("select * from mail_message order by id desc", ROW_MAPPER);
+	}	
+	
 	public List<MailMessage> findByAccountId(Integer accountId) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query("select * from mail_message where account_id = ? order by id desc", ROW_MAPPER, accountId);
@@ -48,8 +53,8 @@ public class MailMessageDao {
 
 	public void save(MailMessage mailMessage) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update("insert into mail_message(account_id, sender, size, created) values (?,?,?,?)", mailMessage.getAccountId(),
-				mailMessage.getSender(), mailMessage.getSize(), mailMessage.getCreated());
+		jdbcTemplate.update("insert into mail_message(account_id, sender, subject, size, created) values (?,?,?,?,?)", mailMessage.getAccountId(),
+				mailMessage.getSender(), mailMessage.getSubject(), mailMessage.getSize(), mailMessage.getCreated());
 		mailMessage.setId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class));
 	}
 
@@ -65,6 +70,7 @@ public class MailMessageDao {
 			mailMessage.setId(rs.getInt("id"));
 			mailMessage.setAccountId(rs.getInt("account_id"));
 			mailMessage.setSender(rs.getString("sender"));
+			mailMessage.setSubject(rs.getString("subject"));			
 			mailMessage.setSize(rs.getInt("size"));
 			mailMessage.setCreated(new Date(rs.getTimestamp("created").getTime()));
 			return mailMessage;

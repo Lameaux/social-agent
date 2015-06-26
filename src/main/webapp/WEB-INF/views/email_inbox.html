@@ -1,1 +1,29 @@
 <h1>Inbox</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Sender</th>
+			<th>Recipient</th>
+			<th>Subject</th>
+			<th>Date</th>
+			<th>Size</th>						
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($message in $messages)
+		<tr>
+			<td>${message.sender}</td>
+			<td>${message.accountId}</td>
+			<td>${message.subject}</td>
+			<td>${message.created}</td>
+			<td>${message.size}</td>												
+			<td>
+				<a href="/email/inbox/view/${email.id}" class="btn btn-primary"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> View</a> 
+				<a href="/email/inbox/delete/${email.id}" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+			</td>
+		</tr>
+		#end
+	</tbody>
+</table>

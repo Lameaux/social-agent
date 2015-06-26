@@ -1,0 +1,21 @@
+<h1>Edit email</h1>
+
+#springBind("mail_account")
+<form class="form-inline" method="post">
+
+  <div class="form-group">
+	#springBind("mail_account.login")    
+    <input type="hidden" class="form-control" id="emailDomain" name="${status.expression}" value="$!status.value">
+	#springBind("mail_account.domain")    
+    <input type="hidden" class="form-control" id="emailDomain" name="${status.expression}" value="$!status.value">
+
+    ${mail_account.login}@${mail_account.domain} 
+  </div>
+  <div class="checkbox">
+    <label>
+	#springBind("mail_account.active")
+      <input type="checkbox" name="${status.expression}" value="true" #if("$!{status.value}"=="true") checked="checked"#end> Active
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Update</button>
+</form>

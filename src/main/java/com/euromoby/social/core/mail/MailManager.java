@@ -3,6 +3,8 @@ package com.euromoby.social.core.mail;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -35,6 +37,11 @@ public class MailManager {
 	}
 
 	@Transactional(readOnly=true)	
+	public MailAccount findAccount(Integer id) {
+			return mailAccountDao.findById(id);
+	}	
+	
+	@Transactional(readOnly=true)	
 	public MailAccount findAccount(Tuple<String, String> loginDomain) {
 			return mailAccountDao.findByLoginAndDomain(loginDomain.getFirst(), loginDomain.getSecond());
 	}
@@ -59,6 +66,11 @@ public class MailManager {
 		return mailAccountDao.findAll();
 	}
 
+	@Transactional(readOnly=true)	
+	public List<MailMessage> getMessages() {
+		return mailMessageDao.findAll();
+	}	
+	
 	@Transactional(readOnly=true)	
 	public List<MailMessage> getMessages(Integer accountId) {
 		return mailMessageDao.findByAccountId(accountId);
@@ -86,6 +98,7 @@ public class MailManager {
 		mailMessage.setSender(mailSession.getSender().joinString("@"));
 		mailMessage.setSize(mailSession.getRealMailSize());
 		mailMessage.setCreated(new Date());
+		mailMessage.setSubject(getSubjectFromHeaders(mailSession.getHeaders()));
 		mailMessageDao.save(mailMessage);
 		
 		try {
@@ -97,4 +110,15 @@ public class MailManager {
 
 	}
 
+	private String getSubjectFromHeaders(List<String> headers) {
+		Pattern re = Pattern.compile("^Subject:(.*)$", Pattern.CASE_INSENSITIVE);
+		for (String header : headers) {
+			Matcher m = re.matcher(header);
+			if (m.matches()) {
+				return m.group(1);
+			}
+		}
+		return "No subject";
+	}
+	
 }

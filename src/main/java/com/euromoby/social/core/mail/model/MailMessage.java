@@ -7,6 +7,7 @@ public class MailMessage {
 	private int id;
 	private int accountId;
 	private String sender;
+	private String subject;
 	private int size;
 	private Date created;
 
@@ -48,6 +49,14 @@ public class MailMessage {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 }

@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS mail_message (
 	id INT auto_increment PRIMARY KEY, 
 	account_id INT,
 	sender VARCHAR(255),
+	subject TEXT,	
 	size INT,
 	created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;

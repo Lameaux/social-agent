@@ -12,12 +12,12 @@
     ">
 	<context:component-scan base-package="com.euromoby.social.core" />
 	
-	<context:property-placeholder location="classpath:/com/euromoby/social/db.properties"/>
-
+	<context:property-placeholder location="classpath:/com/euromoby/social/config.properties"/>
+	
 	<bean id="config" class="com.euromoby.social.core.Config">
-		<property name="serverTimeout" value="30" />
-		<property name="mailHost" value="euromoby.com" />
-		<property name="mailStoragePath" value="mailstorage" />
+		<property name="serverTimeout" value="${mail.timeout}" />
+		<property name="mailHost" value="${mail.host}" />
+		<property name="mailStoragePath" value="${mail.storage}" />
 		<property name="autorunServices">
 			<list>
 				<value>mail</value>

@@ -23,6 +23,15 @@ public class MailAccountDao {
 
 	private static final MailAccountRowMapper ROW_MAPPER = new MailAccountRowMapper();
 
+	public MailAccount findById(Integer id) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return jdbcTemplate.queryForObject("select * from mail_account where id = ?", ROW_MAPPER, id);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}	
+	
 	public MailAccount findByLoginAndDomain(String login, String domain) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try {
