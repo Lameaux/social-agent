@@ -1,5 +1,8 @@
 package com.euromoby.social.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import twitter4j.auth.AccessToken;
 import com.euromoby.social.core.twitter.TwitterManager;
 import com.euromoby.social.core.twitter.TwitterProvider;
 import com.euromoby.social.core.twitter.model.TwitterAccount;
+import com.euromoby.social.core.twitter.model.TwitterGroup;
 import com.euromoby.social.web.exception.ResourceNotFoundException;
 
 @Controller
@@ -33,6 +37,11 @@ public class TwitterController implements AgentController {
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Twitter Accounts");
     	
+    	Map<Integer, String> groupsMap = new HashMap<Integer, String>();
+    	for (TwitterGroup group : twitterManager.getGroups()) {
+    		groupsMap.put(group.getId(), group.getTitle());
+    	}
+    	model.put("groups", groupsMap);     	
     	model.put("twitters", twitterManager.getAccounts());
     	
     	return "twitter_accounts";
@@ -40,15 +49,16 @@ public class TwitterController implements AgentController {
 
     @RequestMapping(value="/twitter/{id}/profile", method=RequestMethod.GET)
     public String editProfileFrom(ModelMap model, @PathVariable("id") String id) {
-    	model.put(MENU_ACTIVE, "twitter");
-    	model.put(PAGE_TITLE, "Twitter Profile");
-    	
+
     	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
     	if (twitterAccount == null) {
     		throw new ResourceNotFoundException();
     	}
     	
+    	model.put(MENU_ACTIVE, "twitter");
+    	model.put(PAGE_TITLE, "Twitter Profile");    	
     	model.put("twitter", twitterAccount);
+    	model.put("groups", twitterManager.getGroups());
     	return "twitter_profile";
     }    
 
@@ -61,6 +71,7 @@ public class TwitterController implements AgentController {
 
     	if (!result.hasErrors()) {
     		currentTwitterAccount.setDescription(twitterAccount.getDescription());
+    		currentTwitterAccount.setGroups(twitterAccount.getGroups());
     		twitterManager.updateAccount(currentTwitterAccount);
     		return "redirect:/twitter";
     	}
@@ -68,6 +79,7 @@ public class TwitterController implements AgentController {
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Twitter Profile");
     	model.put("twitter", twitterAccount);
+    	model.put("groups", twitterManager.getGroups());    	
     	return "twitter_profile";
     }    
  

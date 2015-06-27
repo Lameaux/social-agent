@@ -63,6 +63,7 @@ public class TwitterGroupController implements AgentController {
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Edit Twitter Group");
     	model.put("group", twitterGroup);
+    	model.put("accounts", twitterManager.getAccounts());    	
     	return "twitter_groups_edit";
     }     
 
@@ -76,6 +77,7 @@ public class TwitterGroupController implements AgentController {
     	
     	if (!result.hasErrors()) {
     		checkTwitterGroup.setTitle(twitterGroup.getTitle());
+    		checkTwitterGroup.setAccounts(twitterGroup.getAccounts());
     		twitterManager.updateGroup(checkTwitterGroup);
     		return "redirect:/twitter/groups";
     	}
@@ -83,8 +85,21 @@ public class TwitterGroupController implements AgentController {
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Edit Twitter Group");
     	model.put("group", twitterGroup);
+    	model.put("accounts", twitterManager.getAccounts());
     	return "twitter_groups_edit";
     }      
+    
+    @RequestMapping("/twitter/groups/{id}/delete")
+    public String deleteGroup(ModelMap model, @PathVariable("id") Integer id) {
+
+    	TwitterGroup group = twitterManager.getGroupById(id);
+    	if (group == null) {
+    		throw new ResourceNotFoundException();
+    	}
+    	twitterManager.deleteGroup(group);
+    	
+    	return "redirect:/twitter/groups";
+    } 
     
     
 }

@@ -48,5 +48,14 @@
     <input type="hidden" name="accessTokenSecret" value="$twitter.accessTokenSecret">
   </div>
 
+<h2>Groups</h2>
+
+<ul class="list-group row">
+		#foreach($group in $groups)
+		<li class="list-group-item col-xs-3"><label><input type="checkbox" name="groups" #if($twitter.groups.contains($group.id))checked#end value="${group.id}"> ${group.title}</label></li>
+		#end
+</ul>
+
   <button type="submit" class="btn btn-default">Update</button>
+  <a class="btn btn-default" href="/twitter">Cancel</a>  
 </form>

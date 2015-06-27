@@ -61,7 +61,11 @@ public class TwitterManager {
 	public void updateGroup(TwitterGroup twitterGroup) {
 		twitterGroupDao.update(twitterGroup);
 	}	
-	
+
+	@Transactional
+	public void deleteGroup(TwitterGroup twitterGroup) {
+		twitterGroupDao.delete(twitterGroup);
+	}	
 	
 	@Transactional	
 	public TwitterAccount saveAccessToken(AccessToken accessToken) {

@@ -1,15 +1,19 @@
 package com.euromoby.social.core.twitter.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.Size;
 
 public class TwitterAccount {
 
 	private String id;
 	private String screenName;
-	@Size(max=255, message="Description is longer than 255 chars")
+	@Size(max = 255, message = "Description is longer than 255 chars")
 	private String description;
 	private String accessToken;
 	private String accessTokenSecret;
+	private List<Integer> groups = new ArrayList<Integer>();
 
 	public String getId() {
 		return id;
@@ -49,6 +53,14 @@ public class TwitterAccount {
 
 	public void setAccessTokenSecret(String accessTokenSecret) {
 		this.accessTokenSecret = accessTokenSecret;
+	}
+
+	public List<Integer> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Integer> groups) {
+		this.groups = groups;
 	}
 
 }

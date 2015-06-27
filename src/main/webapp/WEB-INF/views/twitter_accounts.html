@@ -3,22 +3,25 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>ID</th>
 			<th>Screen name</th>
 			<th>Description</th>
+			<th>Groups</th>
 			<th>Action</th>
 		</tr>
 	</thead>
 	<tbody>
 		#foreach($twitter in $twitters)
 		<tr>
-			<td>${twitter.id}</td>
 			<td>${twitter.screenName}</td>
 			<td>${twitter.description}</td>
 			<td>
+			#foreach ($groupId in ${twitter.groups})
+				<a href="/twitter/groups/$groupId/edit"><span class="badge">$groups.get($groupId)</span></a> 
+			#end
+			</td>
+			<td>
 				<a href="/twitter/${twitter.id}/following" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Following</a>
-				<a href="/twitter/${twitter.id}/groups" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Groups</a>
-				<a href="/twitter/${twitter.id}/profile" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Profile</a>
+				<a href="/twitter/${twitter.id}/profile" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit Profile</a>
 			</td>
 		</tr>
 		#end
