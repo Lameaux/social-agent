@@ -1,0 +1,20 @@
+<h1>${twitter.screenName} is following (${friends.size()}):</h1>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Screen name</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($friend in $friends)
+		<tr>
+			<td>${friend.screenName}</td>
+			<td>
+				<a onclick="return confirm('Unfollow $friend.screenName ?');" href="/twitter/${twitter.id}/following/${friend.screenName}/unfollow" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Unfollow</a>
+			</td>
+		</tr>
+		#end
+	</tbody>
+</table>

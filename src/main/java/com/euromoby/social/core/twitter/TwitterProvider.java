@@ -1,16 +1,20 @@
 package com.euromoby.social.core.twitter;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.LRUMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import twitter4j.PagableResponseList;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
@@ -74,4 +78,43 @@ public class TwitterProvider {
 		StatusUpdate statusUpdate = new StatusUpdate(text);
 		return twitter.updateStatus(statusUpdate);		
 	}
+	
+	public List<User> getFriends(TwitterAccount twitterAccount) throws Exception {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		PagableResponseList<User> followingUsers;
+		List<User> following = new ArrayList<User>();
+		long cursor = -1;
+		while (cursor != 0) {
+			followingUsers = twitter.getFriendsList(twitterAccount.getScreenName(), cursor, 200); 
+			for (User user : followingUsers) {
+				following.add(user);
+			}
+			cursor = followingUsers.getNextCursor();
+		} 
+		
+		return following;		
+	}	
+
+	public User follow(TwitterAccount twitterAccount, String screenName) throws Exception {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		return twitter.createFriendship(screenName);
+	}	
+	
+	public User unfollow(TwitterAccount twitterAccount, String screenName) throws Exception {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		return twitter.destroyFriendship(screenName);
+	}	
+	
 }

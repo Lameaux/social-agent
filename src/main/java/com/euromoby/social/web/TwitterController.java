@@ -1,6 +1,7 @@
 package com.euromoby.social.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
 import com.euromoby.social.core.twitter.TwitterManager;
@@ -83,7 +85,38 @@ public class TwitterController implements AgentController {
     	return "twitter_profile";
     }    
  
+    @RequestMapping(value="/twitter/{id}/following")
+    public String profileFollowing(ModelMap model, @PathVariable("id") String id) throws Exception {
 
+    	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
+    	if (twitterAccount == null) {
+    		throw new ResourceNotFoundException();
+    	}
+
+    	List<User> friends = twitterProvider.getFriends(twitterAccount);
+    	
+    	model.put(MENU_ACTIVE, "twitter");
+    	model.put(PAGE_TITLE, "Twitter Following");    	
+    	model.put("twitter", twitterAccount);
+    	model.put("friends", friends);
+    	
+    	return "twitter_following";
+    }    
+
+    @RequestMapping("/twitter/{id}/following/{screenName}/unfollow")
+    public String unfollow(ModelMap model, @PathVariable("id") String id, @PathVariable("screenName") String screenName) throws Exception {
+
+    	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
+    	if (twitterAccount == null) {
+    		throw new ResourceNotFoundException();
+    	}
+    	
+    	twitterProvider.unfollow(twitterAccount, screenName);
+    	
+    	return "redirect:/twitter/" + id + "/following";
+    }    
+    
+    
     @RequestMapping("/twitter/connect")
     public String connectTwitterAccount(ModelMap model) throws Exception {
     	return "redirect:" + twitterProvider.getAuthorizationUrl();
