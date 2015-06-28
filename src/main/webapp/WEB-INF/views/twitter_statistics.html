@@ -1,0 +1,9 @@
+<h1>Statistics for ${twitter.screenName}</h1>
+
+<h2>Following (${friends.size()})</h2>
+<div>
+#foreach($friend in $friends)
+	${friend.screenName}
+	<a onclick="return confirm('Unfollow $friend.screenName ?');" href="/twitter/${twitter.id}/following/${friend.screenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></a>
+#end
+</div>

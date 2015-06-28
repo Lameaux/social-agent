@@ -1,7 +1,9 @@
 package com.euromoby.social.core.twitter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import com.euromoby.social.core.twitter.dao.TwitterMessageDao;
 import com.euromoby.social.core.twitter.model.TwitterAccount;
 import com.euromoby.social.core.twitter.model.TwitterGroup;
 import com.euromoby.social.core.twitter.model.TwitterMessage;
+import com.euromoby.social.web.model.FollowingAction;
 
 @Component
 public class TwitterManager {
@@ -68,19 +71,27 @@ public class TwitterManager {
 	}	
 	
 	@Transactional	
+	public void saveFollowingAction(FollowingAction followingAction) {
+		
+		Set<String> sourceScreenNames = new HashSet<String>();
+		Set<String> targetScreenNames = new HashSet<String>();
+		
+	}
+	
+	
+	@Transactional	
 	public TwitterAccount saveAccessToken(AccessToken accessToken) {
 		String userId = String.valueOf(accessToken.getUserId());
 		TwitterAccount account = twitterAccountDao.findById(userId);
 		if (account == null) {
 			account = new TwitterAccount();
 			account.setId(userId);
-			account.setScreenName(accessToken.getScreenName());
+			account.setScreenName(accessToken.getScreenName().toLowerCase());
 			account.setDescription("");
 			account.setAccessToken(accessToken.getToken());
 			account.setAccessTokenSecret(accessToken.getTokenSecret());
 			twitterAccountDao.save(account);
 		} else {
-			account.setScreenName(accessToken.getScreenName());
 			account.setAccessToken(accessToken.getToken());
 			account.setAccessTokenSecret(accessToken.getTokenSecret());
 			twitterAccountDao.update(account);

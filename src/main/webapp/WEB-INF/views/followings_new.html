@@ -1,0 +1,34 @@
+<h1>New followings</h1>
+
+#springBind("dto")
+<form method="post">
+<div class="row">
+
+	<div class="col-xs-6 form-group">
+		<h2>Who will follow</h2>
+		<p>
+		Groups:
+		#foreach($group in $groups)
+			<label><input type="checkbox" name="groups" #if($dto.groups.contains($group.id))checked#end value="$group.id"> $group.title</label>
+		#end
+		</p>
+		<p>Screen names (space separated):</p>
+		<textarea class="form-control" rows="5" name="screenNames">${dto.screenNames}</textarea>
+	</div>
+	
+	<div class="col-xs-6 form-group">
+		<h2>Who will be followed</h2>
+		<p>
+		Groups:
+		#foreach($group in $groups)
+			<label><input type="checkbox" name="targetGroups" #if($dto.targetGroups.contains($group.id))checked#end value="$group.id"> $group.title</label>
+		#end
+		</p>
+		<p>Screen names (space separated):</p>
+		<textarea class="form-control" rows="5" name="targetScreenNames">${dto.targetScreenNames}</textarea>
+	</div>
+
+</div>
+  <button type="submit" class="btn btn-default">Create</button>
+  <a class="btn btn-default" href="/followings">Cancel</a>
+</form>

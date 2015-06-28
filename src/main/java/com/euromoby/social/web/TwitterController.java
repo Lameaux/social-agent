@@ -85,7 +85,7 @@ public class TwitterController implements AgentController {
     	return "twitter_profile";
     }    
  
-    @RequestMapping(value="/twitter/{id}/following")
+    @RequestMapping(value="/twitter/{id}/statistics")
     public String profileFollowing(ModelMap model, @PathVariable("id") String id) throws Exception {
 
     	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
@@ -96,24 +96,21 @@ public class TwitterController implements AgentController {
     	List<User> friends = twitterProvider.getFriends(twitterAccount);
     	
     	model.put(MENU_ACTIVE, "twitter");
-    	model.put(PAGE_TITLE, "Twitter Following");    	
+    	model.put(PAGE_TITLE, "Twitter Statistics");    	
     	model.put("twitter", twitterAccount);
     	model.put("friends", friends);
     	
-    	return "twitter_following";
+    	return "twitter_statistics";
     }    
 
     @RequestMapping("/twitter/{id}/following/{screenName}/unfollow")
     public String unfollow(ModelMap model, @PathVariable("id") String id, @PathVariable("screenName") String screenName) throws Exception {
-
     	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
     	if (twitterAccount == null) {
     		throw new ResourceNotFoundException();
     	}
-    	
     	twitterProvider.unfollow(twitterAccount, screenName);
-    	
-    	return "redirect:/twitter/" + id + "/following";
+    	return "redirect:/twitter/" + id + "/statistics";
     }    
     
     

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS mail_message (
 
 CREATE TABLE IF NOT EXISTS twitter_account (
 	id VARCHAR(20) PRIMARY KEY, 
-	screen_name VARCHAR(255),
+	screen_name VARCHAR(20),
 	description VARCHAR(255),
 	access_token VARCHAR(255),
 	access_token_secret VARCHAR(255)	
@@ -43,6 +43,20 @@ CREATE TABLE IF NOT EXISTS twitter_account_in_group (
 	group_id INT, 
 	primary key(account_id, group_id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS action_follow (
+	id INT auto_increment PRIMARY KEY,
+	screen_name VARCHAR(20),
+	target_screen_name VARCHAR(20),
+	status INT DEFAULT 0,
+	status_text TEXT
+) ENGINE=InnoDB;
+CREATE INDEX action_follow_screen_name 
+ON action_follow(screen_name);
+
+
+
+
 
 CREATE TABLE IF NOT EXISTS twitter_message (
 	id INT auto_increment PRIMARY KEY,
