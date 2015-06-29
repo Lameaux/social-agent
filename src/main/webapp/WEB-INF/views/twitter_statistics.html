@@ -4,6 +4,6 @@
 <div>
 #foreach($friend in $friends)
 	${friend.screenName}
-	<a onclick="return confirm('Unfollow $friend.screenName ?');" href="/twitter/${twitter.id}/following/${friend.screenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></a>
+	<a onclick="return confirm('Unfollow $friend.screenName ?');" href="/twitter/${twitter.screenName}/following/${friend.screenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></a>
 #end
 </div>

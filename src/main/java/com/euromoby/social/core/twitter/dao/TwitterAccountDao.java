@@ -38,10 +38,24 @@ public class TwitterAccountDao {
 		}
 	}
 
+	public TwitterAccount findByScreenName(String screenName) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			return jdbcTemplate.queryForObject("select a.*, GROUP_CONCAT(ag.group_id) as groups from twitter_account a left join twitter_account_in_group ag on a.id = ag.account_id where screen_name = ? group by a.id", ROW_MAPPER, screenName);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}	
+	
 	public List<TwitterAccount> findAll() {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query("select a.*, GROUP_CONCAT(ag.group_id) as groups from twitter_account a left join twitter_account_in_group ag on a.id = ag.account_id group by a.id order by a.screen_name", ROW_MAPPER);
 	}
+
+	public List<TwitterAccount> findByGroupId(Integer groupId) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.query("select a.*, ag.group_id as groups from twitter_account a join twitter_account_in_group ag on a.id = ag.account_id where ag.group_id = ? order by a.screen_name", ROW_MAPPER, groupId);
+	}	
 	
 	public void save(TwitterAccount twitterAccount) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

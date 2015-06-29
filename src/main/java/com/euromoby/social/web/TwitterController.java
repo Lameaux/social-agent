@@ -103,14 +103,14 @@ public class TwitterController implements AgentController {
     	return "twitter_statistics";
     }    
 
-    @RequestMapping("/twitter/{id}/following/{screenName}/unfollow")
-    public String unfollow(ModelMap model, @PathVariable("id") String id, @PathVariable("screenName") String screenName) throws Exception {
-    	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
+    @RequestMapping("/twitter/{screenName}/following/{targetScreenName}/unfollow")
+    public String unfollow(ModelMap model, @PathVariable("screenName") String screenName, @PathVariable("targetScreenName") String targetScreenName) throws Exception {
+    	TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(screenName);
     	if (twitterAccount == null) {
     		throw new ResourceNotFoundException();
     	}
-    	twitterProvider.unfollow(twitterAccount, screenName);
-    	return "redirect:/twitter/" + id + "/statistics";
+    	twitterProvider.unfollow(twitterAccount, targetScreenName);
+    	return "redirect:/twitter/" + twitterAccount.getId() + "/statistics";
     }    
     
     

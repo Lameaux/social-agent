@@ -12,11 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import twitter4j.auth.AccessToken;
 
 import com.euromoby.social.core.twitter.dao.TwitterAccountDao;
+import com.euromoby.social.core.twitter.dao.TwitterActionFollowDao;
 import com.euromoby.social.core.twitter.dao.TwitterGroupDao;
 import com.euromoby.social.core.twitter.dao.TwitterMessageDao;
 import com.euromoby.social.core.twitter.model.TwitterAccount;
+import com.euromoby.social.core.twitter.model.TwitterActionFollow;
 import com.euromoby.social.core.twitter.model.TwitterGroup;
 import com.euromoby.social.core.twitter.model.TwitterMessage;
+import com.euromoby.social.core.utils.StringUtils;
 import com.euromoby.social.web.model.FollowingAction;
 
 @Component
@@ -28,7 +31,8 @@ public class TwitterManager {
 	private TwitterMessageDao twitterMessageDao;
 	@Autowired
 	private TwitterGroupDao twitterGroupDao;	
-	
+	@Autowired
+	private TwitterActionFollowDao twitterActionFollowDao;	
 
 	@Transactional(readOnly=true)	
 	public List<TwitterAccount> getAccounts() {
@@ -46,8 +50,28 @@ public class TwitterManager {
 	}	
 
 	@Transactional(readOnly=true)
+	public TwitterAccount getAccountByScreenName(String screenName) {
+		return twitterAccountDao.findByScreenName(screenName);
+	}	
+	
+	@Transactional(readOnly=true)
 	public TwitterGroup getGroupById(Integer id) {
 		return twitterGroupDao.findById(id);
+	}	
+
+	@Transactional(readOnly=true)
+	public List<TwitterActionFollow> getFollowActions() {
+		return twitterActionFollowDao.findAll();
+	}	
+
+	@Transactional(readOnly=true)
+	public TwitterActionFollow getFollowActionById(Integer id) {
+		return twitterActionFollowDao.findById(id);
+	}	
+	
+	@Transactional(readOnly=true)
+	public List<TwitterActionFollow> getNewFollowActions() {
+		return twitterActionFollowDao.findAllNew();
 	}	
 	
 	@Transactional
@@ -69,15 +93,54 @@ public class TwitterManager {
 	public void deleteGroup(TwitterGroup twitterGroup) {
 		twitterGroupDao.delete(twitterGroup);
 	}	
+
+	@Transactional
+	public void deleteFollowAction(TwitterActionFollow twitterActionFollow) {
+		twitterActionFollowDao.delete(twitterActionFollow);
+	}	
+	
+	@Transactional	
+	public void updateFollowingAction(TwitterActionFollow followAction) {
+		twitterActionFollowDao.update(followAction);
+	}
 	
 	@Transactional	
 	public void saveFollowingAction(FollowingAction followingAction) {
+		Set<String> sourceSet = getScreenNames(followingAction.getScreenNames(), followingAction.getGroups());
+		Set<String> targetSet = getScreenNames(followingAction.getTargetScreenNames(), followingAction.getTargetGroups());
 		
-		Set<String> sourceScreenNames = new HashSet<String>();
-		Set<String> targetScreenNames = new HashSet<String>();
+		for (String source : sourceSet) {
+			for (String target : targetSet) {
+				if (source.equals(target)) {
+					continue;
+				}
+				TwitterActionFollow actionFollow = new TwitterActionFollow();
+				actionFollow.setScreenName(source);
+				actionFollow.setTargetScreenName(target);
+				actionFollow.setStatus(TwitterActionFollow.STATUS_NEW);
+				twitterActionFollowDao.save(actionFollow);
+			}
+		}
 		
 	}
+
 	
+	private Set<String> getScreenNames(String screenNamesString, List<Integer> groupIds) {
+		Set<String> set = new HashSet<String>();
+		String sourceScreenNamesString = screenNamesString.toLowerCase().trim();
+		if (!StringUtils.nullOrEmpty(sourceScreenNamesString)) {
+			for (String sourceScreenName : sourceScreenNamesString.split("\\s+")) {
+				set.add(sourceScreenName);
+			}
+		}
+		for (Integer groupId : groupIds) {
+			List<TwitterAccount> accounts = twitterAccountDao.findByGroupId(groupId);
+			for (TwitterAccount account : accounts) {
+				set.add(account.getScreenName().toLowerCase());
+			}
+		}		
+		return set;
+	}
 	
 	@Transactional	
 	public TwitterAccount saveAccessToken(AccessToken accessToken) {

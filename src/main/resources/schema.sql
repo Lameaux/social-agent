@@ -44,15 +44,14 @@ CREATE TABLE IF NOT EXISTS twitter_account_in_group (
 	primary key(account_id, group_id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS action_follow (
+CREATE TABLE IF NOT EXISTS twitter_action_follow (
 	id INT auto_increment PRIMARY KEY,
 	screen_name VARCHAR(20),
 	target_screen_name VARCHAR(20),
 	status INT DEFAULT 0,
-	status_text TEXT
+	error_text TEXT
 ) ENGINE=InnoDB;
-CREATE INDEX action_follow_screen_name 
-ON action_follow(screen_name);
+
 
 
 

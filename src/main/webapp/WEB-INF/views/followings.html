@@ -1,1 +1,37 @@
 <h1>Followings</h1>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Follower</th>
+			<th>To Follow</th>
+			<th>Status</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		#foreach($action in $actions)
+		<tr>
+			<td>${action.id}</td>
+			<td>${action.screenName}</td>
+			<td>${action.targetScreenName}</td>
+			<td>
+			#if ($action.status == 0)
+				<span class="label label-primary">NEW</span> 
+			#end
+			#if ($action.status == 1)
+				<span class="label label-success">OK</span> 
+				<a onclick="return confirm('Unfollow $action.targetScreenName ?');" href="/twitter/${action.screenName}/following/${action.targetScreenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Unfollow</a>				
+			#end
+			#if ($action.status == 2)
+				<span class="label label-danger">ERROR</span> 
+				$!{action.errorText}
+			#end			
+			</td>
+			<td>
+				<a href="/followings/${action.id}/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+			</td>
+		</tr>
+		#end
+	</tbody>
+</table>
