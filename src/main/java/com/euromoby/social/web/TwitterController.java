@@ -86,7 +86,7 @@ public class TwitterController implements AgentController {
     }    
  
     @RequestMapping(value="/twitter/{id}/statistics")
-    public String profileFollowing(ModelMap model, @PathVariable("id") String id) throws Exception {
+    public String profileStatistics(ModelMap model, @PathVariable("id") String id) throws Exception {
 
     	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
     	if (twitterAccount == null) {
@@ -94,11 +94,13 @@ public class TwitterController implements AgentController {
     	}
 
     	List<User> friends = twitterProvider.getFriends(twitterAccount);
+    	List<User> followers = twitterProvider.getFollowers(twitterAccount);
     	
     	model.put(MENU_ACTIVE, "twitter");
     	model.put(PAGE_TITLE, "Twitter Statistics");    	
     	model.put("twitter", twitterAccount);
     	model.put("friends", friends);
+    	model.put("followers", followers);
     	
     	return "twitter_statistics";
     }    

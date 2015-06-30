@@ -100,6 +100,26 @@ public class TwitterProvider {
 		return following;		
 	}	
 
+	public List<User> getFollowers(TwitterAccount twitterAccount) throws Exception {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		PagableResponseList<User> followersUsers;
+		List<User> followers = new ArrayList<User>();
+		long cursor = -1;
+		while (cursor != 0) {
+			followersUsers = twitter.getFollowersList(twitterAccount.getScreenName(), cursor, 200); 
+			for (User user : followersUsers) {
+				followers.add(user);
+			}
+			cursor = followersUsers.getNextCursor();
+		} 
+		
+		return followers;		
+	}	
+
 	public User follow(TwitterAccount twitterAccount, String screenName) throws TwitterException {
 		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
 		

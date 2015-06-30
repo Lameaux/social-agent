@@ -7,3 +7,10 @@
 	<a onclick="return confirm('Unfollow $friend.screenName ?');" href="/twitter/${twitter.screenName}/following/${friend.screenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></a>
 #end
 </div>
+
+<h2>Followers (${followers.size()})</h2>
+<div>
+#foreach($follower in $followers)
+	${follower.screenName}
+#end
+</div>
