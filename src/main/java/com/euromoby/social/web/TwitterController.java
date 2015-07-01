@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.EscapeTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import twitter4j.Status;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
@@ -105,6 +108,26 @@ public class TwitterController implements AgentController {
     	return "twitter_statistics";
     }    
 
+    @RequestMapping(value="/twitter/{screenName}/tweets")
+    public String profileTweets(ModelMap model, @PathVariable("screenName") String screenName) throws Exception {
+
+    	TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(screenName);
+    	if (twitterAccount == null) {
+    		throw new ResourceNotFoundException();
+    	}
+
+    	List<Status> tweets = twitterProvider.getTweets(twitterAccount);
+    	
+    	model.put(MENU_ACTIVE, "twitter");
+    	model.put(PAGE_TITLE, "Twitter Statistics");    	
+    	model.put("twitter", twitterAccount);
+    	model.put("tweets", tweets);
+    	model.put("date", new DateTool());    	
+    	model.put("escape", new EscapeTool());  
+    	
+    	return "twitter_tweets";
+    }    
+    
     @RequestMapping("/twitter/{screenName}/following/{targetScreenName}/unfollow")
     public String unfollow(ModelMap model, @PathVariable("screenName") String screenName, @PathVariable("targetScreenName") String targetScreenName) throws Exception {
     	TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(screenName);

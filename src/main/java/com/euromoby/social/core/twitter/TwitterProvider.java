@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import twitter4j.PagableResponseList;
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -120,6 +121,21 @@ public class TwitterProvider {
 		return followers;		
 	}	
 
+	public List<Status> getTweets(TwitterAccount twitterAccount) throws Exception {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		ResponseList<Status> responseList = twitter.getUserTimeline();
+		
+		List<Status> tweets = new ArrayList<Status>();
+		for (Status status : responseList) {
+			tweets.add(status);
+		}
+		return tweets;		
+	}	
+	
 	public User follow(TwitterAccount twitterAccount, String screenName) throws TwitterException {
 		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
 		
