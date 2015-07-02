@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Config {
 
+	public static final String DEFAULT_HTTP_USERAGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";	
+	
 	private List<String> autorunServices;
 	private String mailHost;
 	private String mailStoragePath;
@@ -13,6 +15,7 @@ public class Config {
 	private int proxyPort;
 	private String twitterKey;
 	private String twitterSecret;
+	private String httpUserAgent = DEFAULT_HTTP_USERAGENT;
 	
 
 	public List<String> getAutorunServices() {
@@ -85,6 +88,14 @@ public class Config {
 
 	public void setTwitterSecret(String twitterSecret) {
 		this.twitterSecret = twitterSecret;
+	}
+
+	public String getHttpUserAgent() {
+		return httpUserAgent;
+	}
+
+	public void setHttpUserAgent(String httpUserAgent) {
+		this.httpUserAgent = httpUserAgent;
 	}
 
 }

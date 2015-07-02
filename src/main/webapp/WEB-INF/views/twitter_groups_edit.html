@@ -31,6 +31,19 @@
     <input type="text" class="form-control" id="groupTitle" name="${status.expression}" value="$!status.value">
   </div>
 
+  <div class="form-group">
+    <label for="groupRss">RSS</label>
+	#springBind("group.rssUrl")    
+    <input type="text" class="form-control" id="groupRss" name="${status.expression}" value="$!status.value">
+  </div>
+
+  <div class="form-group">
+    <label>
+	#springBind("group.broadcastRss")    
+    <input type="checkbox" name="${status.expression}" value="true" #if("$!{status.value}"=="true") checked="checked"#end>
+    Broadcast RSS</label>
+  </div>
+
 
 <h2>Accounts</h2>  
 <ul class="list-group row">

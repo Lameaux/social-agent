@@ -4,10 +4,10 @@ CREATE DATABASE social_agent CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- DROP INDEX IF EXISTS mail_account_unique;
 -- DROP TABLE IF EXISTS mail_message;
 -- DROP TABLE IF EXISTS twitter_account;
--- DROP TABLE IF EXISTS twitter_group
--- DROP TABLE IF EXISTS twitter_account_in_group
--- DROP TABLE IF EXISTS twitter_action_follow
--- DROP TABLE IF EXISTS twitter_action_status
+-- DROP TABLE IF EXISTS twitter_group;
+-- DROP TABLE IF EXISTS twitter_account_in_group;
+-- DROP TABLE IF EXISTS twitter_action_follow;
+-- DROP TABLE IF EXISTS twitter_action_status;
 
 
 CREATE TABLE IF NOT EXISTS mail_account (
@@ -38,7 +38,9 @@ CREATE TABLE IF NOT EXISTS twitter_account (
 
 CREATE TABLE IF NOT EXISTS twitter_group (
 	id INT auto_increment PRIMARY KEY, 
-	title VARCHAR(255)
+	title VARCHAR(255),
+	rss_url VARCHAR(255),
+	broadcast_rss INT DEFAULT 0	
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS twitter_account_in_group (

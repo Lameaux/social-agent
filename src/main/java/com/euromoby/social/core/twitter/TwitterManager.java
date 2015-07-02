@@ -45,9 +45,10 @@ public class TwitterManager {
 	}	
 
 	@Transactional(readOnly=true)	
-	public List<TwitterGroup> getGroups() {
-		return twitterGroupDao.findAll();
+	public List<TwitterAccount> getAccountsByGroupId(Integer groupId) {
+		return twitterAccountDao.findByGroupId(groupId);
 	}	
+	
 	
 	@Transactional(readOnly=true)
 	public TwitterAccount getAccountById(String id) {
@@ -57,6 +58,17 @@ public class TwitterManager {
 	@Transactional(readOnly=true)
 	public TwitterAccount getAccountByScreenName(String screenName) {
 		return twitterAccountDao.findByScreenName(screenName);
+	}	
+
+
+	@Transactional(readOnly=true)	
+	public List<TwitterGroup> getGroups() {
+		return twitterGroupDao.findAll();
+	}	
+
+	@Transactional(readOnly=true)	
+	public List<TwitterGroup> getGroupsWithBroadcastRss() {
+		return twitterGroupDao.findAllWithBroadcastRss();
 	}	
 	
 	@Transactional(readOnly=true)
@@ -93,6 +105,13 @@ public class TwitterManager {
 	public List<TwitterActionStatus> getNewStatusActions() {
 		return twitterActionStatusDao.findAllNew();
 	}	
+
+	@Transactional(readOnly=true)
+	public int countStatusActionsByScreenNameAndText(String screenName, String message) {
+		return twitterActionStatusDao.countByScreenNameAndText(screenName, message);
+	}		
+	
+	
 	
 	
 	@Transactional
@@ -154,11 +173,15 @@ public class TwitterManager {
 	public void updateStatusAction(TwitterActionStatus twitterActionStatus) {
 		twitterActionStatusDao.update(twitterActionStatus);
 	}
+
+	@Transactional	
+	public void saveStatusAction(TwitterActionStatus twitterActionStatus) {
+		twitterActionStatusDao.save(twitterActionStatus);
+	}	
 	
 	@Transactional
 	public void saveStatusAction(StatusAction statusAction) {
 		Set<String> sourceSet = getScreenNames(statusAction.getScreenNames(), statusAction.getGroups());
-
 		for (String source : sourceSet) {
 			TwitterActionStatus actionStatus = new TwitterActionStatus();
 			actionStatus.setScreenName(source);

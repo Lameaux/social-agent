@@ -45,6 +45,14 @@ public class TwitterActionStatusDao {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query("select * from twitter_action_status where status = ? order by id", ROW_MAPPER, TwitterActionStatus.STATUS_NEW);
 	}	
+
+	public int countByScreenNameAndText(String screenName, String message) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.queryForObject("select count(*) from twitter_action_status where screen_name = ? and message = ?", Integer.class, screenName, message);
+	}	
+	
+	
+	
 	
 	public void save(TwitterActionStatus actionStatus) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

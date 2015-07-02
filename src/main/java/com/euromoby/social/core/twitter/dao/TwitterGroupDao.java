@@ -32,7 +32,7 @@ public class TwitterGroupDao {
 	public TwitterGroup findById(Integer id) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try {
-			return jdbcTemplate.queryForObject("select g.*, GROUP_CONCAT(ag.account_id) as accounts from twitter_group g left join twitter_account_in_group ag on g.id = ag.group_id where id = ? group by g.id", ROW_MAPPER, id);
+			return jdbcTemplate.queryForObject("select g.*, GROUP_CONCAT(ag.account_id) as accounts from twitter_group g left join twitter_account_in_group ag on g.id = ag.group_id where g.id = ? group by g.id", ROW_MAPPER, id);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -42,6 +42,11 @@ public class TwitterGroupDao {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query("select g.*, GROUP_CONCAT(ag.account_id) as accounts from twitter_group g left join twitter_account_in_group ag on g.id = ag.group_id group by g.id order by g.title", ROW_MAPPER);
 	}
+
+	public List<TwitterGroup> findAllWithBroadcastRss() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.query("select g.*, GROUP_CONCAT(ag.account_id) as accounts from twitter_group g left join twitter_account_in_group ag on g.id = ag.group_id where g.broadcast_rss = '1' group by g.id order by g.title", ROW_MAPPER);
+	}	
 	
 	public void save(TwitterGroup twitterGroup) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -50,7 +55,7 @@ public class TwitterGroupDao {
 
 	public void update(TwitterGroup twitterGroup) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update("update twitter_group set title = ? where id = ?", twitterGroup.getTitle(), twitterGroup.getId());
+		jdbcTemplate.update("update twitter_group set title = ?, rss_url=?, broadcast_rss=? where id = ?", twitterGroup.getTitle(), twitterGroup.getRssUrl(), twitterGroup.isBroadcastRss(), twitterGroup.getId());
 
 		jdbcTemplate.update("delete from twitter_account_in_group where group_id = ?", twitterGroup.getId());
 		for (String accountId : twitterGroup.getAccounts()) {
@@ -70,6 +75,8 @@ public class TwitterGroupDao {
 			TwitterGroup twitterGroup = new TwitterGroup();
 			twitterGroup.setId(rs.getInt("id"));
 			twitterGroup.setTitle(rs.getString("title"));
+			twitterGroup.setRssUrl(rs.getString("rss_url"));
+			twitterGroup.setBroadcastRss(rs.getInt("broadcast_rss") == 1);			
 			List<String> accountIds = new ArrayList<String>();
 			twitterGroup.setAccounts(accountIds);
 			String accounts = rs.getString("accounts");

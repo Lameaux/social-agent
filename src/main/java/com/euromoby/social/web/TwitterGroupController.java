@@ -77,6 +77,8 @@ public class TwitterGroupController implements AgentController {
     	
     	if (!result.hasErrors()) {
     		checkTwitterGroup.setTitle(twitterGroup.getTitle());
+    		checkTwitterGroup.setRssUrl(twitterGroup.getRssUrl());    		
+    		checkTwitterGroup.setBroadcastRss(twitterGroup.isBroadcastRss());
     		checkTwitterGroup.setAccounts(twitterGroup.getAccounts());
     		twitterManager.updateGroup(checkTwitterGroup);
     		return "redirect:/twitter/groups";
