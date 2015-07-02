@@ -15,7 +15,7 @@
 			<td>$date.format('yyyy-MM-dd HH:mm:ss', $tweet.createdAt)</td>
 			<td>$escape.html($tweet.text)</td>
 			<td>
-				<a href="/twitter/${twitter.id}/statistics" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Retweet</a>
+				<a onclick="return confirm('Remove tweet $tweet.id ?');" href="/twitter/${twitter.screenName}/tweets/${tweet.id}/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete status</a>
 			</td>
 		</tr>
 		#end

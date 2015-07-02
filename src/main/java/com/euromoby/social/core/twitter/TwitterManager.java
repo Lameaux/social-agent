@@ -13,14 +13,17 @@ import twitter4j.auth.AccessToken;
 
 import com.euromoby.social.core.twitter.dao.TwitterAccountDao;
 import com.euromoby.social.core.twitter.dao.TwitterActionFollowDao;
+import com.euromoby.social.core.twitter.dao.TwitterActionStatusDao;
 import com.euromoby.social.core.twitter.dao.TwitterGroupDao;
 import com.euromoby.social.core.twitter.dao.TwitterMessageDao;
 import com.euromoby.social.core.twitter.model.TwitterAccount;
 import com.euromoby.social.core.twitter.model.TwitterActionFollow;
+import com.euromoby.social.core.twitter.model.TwitterActionStatus;
 import com.euromoby.social.core.twitter.model.TwitterGroup;
 import com.euromoby.social.core.twitter.model.TwitterMessage;
 import com.euromoby.social.core.utils.StringUtils;
 import com.euromoby.social.web.model.FollowingAction;
+import com.euromoby.social.web.model.StatusAction;
 
 @Component
 public class TwitterManager {
@@ -33,6 +36,8 @@ public class TwitterManager {
 	private TwitterGroupDao twitterGroupDao;	
 	@Autowired
 	private TwitterActionFollowDao twitterActionFollowDao;	
+	@Autowired
+	private TwitterActionStatusDao twitterActionStatusDao;	
 
 	@Transactional(readOnly=true)	
 	public List<TwitterAccount> getAccounts() {
@@ -73,6 +78,22 @@ public class TwitterManager {
 	public List<TwitterActionFollow> getNewFollowActions() {
 		return twitterActionFollowDao.findAllNew();
 	}	
+
+	@Transactional(readOnly=true)
+	public List<TwitterActionStatus> getStatusActions() {
+		return twitterActionStatusDao.findAll();
+	}	
+
+	@Transactional(readOnly=true)
+	public TwitterActionStatus getStatusActionById(Integer id) {
+		return twitterActionStatusDao.findById(id);
+	}	
+	
+	@Transactional(readOnly=true)
+	public List<TwitterActionStatus> getNewStatusActions() {
+		return twitterActionStatusDao.findAllNew();
+	}	
+	
 	
 	@Transactional
 	public void updateAccount(TwitterAccount twitterAccount) {
@@ -124,6 +145,29 @@ public class TwitterManager {
 		
 	}
 
+	@Transactional
+	public void deleteStatusAction(TwitterActionStatus twitterActionStatus) {
+		twitterActionStatusDao.delete(twitterActionStatus);
+	}	
+	
+	@Transactional	
+	public void updateStatusAction(TwitterActionStatus twitterActionStatus) {
+		twitterActionStatusDao.update(twitterActionStatus);
+	}
+	
+	@Transactional
+	public void saveStatusAction(StatusAction statusAction) {
+		Set<String> sourceSet = getScreenNames(statusAction.getScreenNames(), statusAction.getGroups());
+
+		for (String source : sourceSet) {
+			TwitterActionStatus actionStatus = new TwitterActionStatus();
+			actionStatus.setScreenName(source);
+			actionStatus.setMessage(statusAction.getMessage());
+			actionStatus.setStatus(TwitterActionStatus.STATUS_NEW);
+			twitterActionStatusDao.save(actionStatus);
+		}
+
+	}	
 	
 	private Set<String> getScreenNames(String screenNamesString, List<Integer> groupIds) {
 		Set<String> set = new HashSet<String>();

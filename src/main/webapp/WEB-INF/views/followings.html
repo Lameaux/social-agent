@@ -21,7 +21,6 @@
 			#end
 			#if ($action.status == 1)
 				<span class="label label-success">OK</span> 
-				<a onclick="return confirm('Unfollow $action.targetScreenName ?');" href="/twitter/${action.screenName}/following/${action.targetScreenName}/unfollow"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Unfollow</a>				
 			#end
 			#if ($action.status == 2)
 				<span class="label label-danger">ERROR</span> 
@@ -29,7 +28,8 @@
 			#end			
 			</td>
 			<td>
-				<a href="/followings/${action.id}/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>
+				<a href="/twitter/${action.screenName}/statistics" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Followers and Followings</a>
+				<a href="/followings/${action.id}/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete action</a>
 			</td>
 		</tr>
 		#end

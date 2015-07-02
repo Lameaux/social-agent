@@ -88,10 +88,10 @@ public class TwitterController implements AgentController {
     	return "twitter_profile";
     }    
  
-    @RequestMapping(value="/twitter/{id}/statistics")
-    public String profileStatistics(ModelMap model, @PathVariable("id") String id) throws Exception {
+    @RequestMapping(value="/twitter/{screenName}/statistics")
+    public String profileStatistics(ModelMap model, @PathVariable("screenName") String screenName) throws Exception {
 
-    	TwitterAccount twitterAccount = twitterManager.getAccountById(id);
+    	TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(screenName);
     	if (twitterAccount == null) {
     		throw new ResourceNotFoundException();
     	}
@@ -119,7 +119,7 @@ public class TwitterController implements AgentController {
     	List<Status> tweets = twitterProvider.getTweets(twitterAccount);
     	
     	model.put(MENU_ACTIVE, "twitter");
-    	model.put(PAGE_TITLE, "Twitter Statistics");    	
+    	model.put(PAGE_TITLE, "Twitter Last 20 Tweets");    	
     	model.put("twitter", twitterAccount);
     	model.put("tweets", tweets);
     	model.put("date", new DateTool());    	
@@ -138,6 +138,15 @@ public class TwitterController implements AgentController {
     	return "redirect:/twitter/" + twitterAccount.getId() + "/statistics";
     }    
     
+    @RequestMapping("/twitter/{screenName}/tweets/{tweetId}/delete")
+    public String deleteTweet(ModelMap model, @PathVariable("screenName") String screenName, @PathVariable("tweetId") Long tweetId) throws Exception {
+    	TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(screenName);
+    	if (twitterAccount == null) {
+    		throw new ResourceNotFoundException();
+    	}
+    	twitterProvider.deleteStatus(twitterAccount, tweetId);
+    	return "redirect:/twitter/" + twitterAccount.getScreenName() + "/tweets";
+    } 
     
     @RequestMapping("/twitter/connect")
     public String connectTwitterAccount(ModelMap model) throws Exception {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import twitter4j.TwitterException;
@@ -25,9 +26,8 @@ public class TwitterFollowTask {
 	@Autowired
 	private TwitterProvider twitterProvider;
 
-	//@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 5000) // 60000
 	public void execute() {
-		log.debug("started");
 		List<TwitterActionFollow> followActions = twitterManager.getNewFollowActions();
 		for (TwitterActionFollow followAction : followActions) {
 			TwitterAccount twitterAccount = twitterManager.getAccountByScreenName(followAction.getScreenName());

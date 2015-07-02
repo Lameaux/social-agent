@@ -4,7 +4,10 @@ CREATE DATABASE social_agent CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- DROP INDEX IF EXISTS mail_account_unique;
 -- DROP TABLE IF EXISTS mail_message;
 -- DROP TABLE IF EXISTS twitter_account;
--- DROP TABLE IF EXISTS twitter_message;
+-- DROP TABLE IF EXISTS twitter_group
+-- DROP TABLE IF EXISTS twitter_account_in_group
+-- DROP TABLE IF EXISTS twitter_action_follow
+-- DROP TABLE IF EXISTS twitter_action_status
 
 
 CREATE TABLE IF NOT EXISTS mail_account (
@@ -52,14 +55,12 @@ CREATE TABLE IF NOT EXISTS twitter_action_follow (
 	error_text TEXT
 ) ENGINE=InnoDB;
 
-
-
-
-
-
-CREATE TABLE IF NOT EXISTS twitter_message (
+CREATE TABLE IF NOT EXISTS twitter_action_status(
 	id INT auto_increment PRIMARY KEY,
-	account_id VARCHAR(20), 
-	message_text VARCHAR(255)
+	screen_name VARCHAR(20),
+	message VARCHAR(140),
+	status INT DEFAULT 0,
+	error_text TEXT
 ) ENGINE=InnoDB;
+
 

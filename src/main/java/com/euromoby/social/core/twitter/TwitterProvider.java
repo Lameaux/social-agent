@@ -71,16 +71,6 @@ public class TwitterProvider {
 		return accessToken;
 	}
 	
-	public Status sendMessage(TwitterAccount twitterAccount, String text) throws Exception {
-		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
-		
-		Twitter twitter = getTwitter();
-		twitter.setOAuthAccessToken(accessToken);
-		
-		StatusUpdate statusUpdate = new StatusUpdate(text);
-		return twitter.updateStatus(statusUpdate);		
-	}
-	
 	public List<User> getFriends(TwitterAccount twitterAccount) throws Exception {
 		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
 		
@@ -135,6 +125,17 @@ public class TwitterProvider {
 		}
 		return tweets;		
 	}	
+
+	
+	public Status status(TwitterAccount twitterAccount, String text) throws TwitterException {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		StatusUpdate statusUpdate = new StatusUpdate(text);
+		return twitter.updateStatus(statusUpdate);		
+	}	
 	
 	public User follow(TwitterAccount twitterAccount, String screenName) throws TwitterException {
 		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
@@ -152,6 +153,15 @@ public class TwitterProvider {
 		twitter.setOAuthAccessToken(accessToken);
 		
 		return twitter.destroyFriendship(screenName);
+	}	
+
+	public Status deleteStatus(TwitterAccount twitterAccount, Long tweetId) throws TwitterException {
+		AccessToken accessToken = new AccessToken(twitterAccount.getAccessToken(), twitterAccount.getAccessTokenSecret(), Long.parseLong(twitterAccount.getId()));
+		
+		Twitter twitter = getTwitter();
+		twitter.setOAuthAccessToken(accessToken);
+		
+		return twitter.destroyStatus(tweetId);
 	}	
 	
 }
