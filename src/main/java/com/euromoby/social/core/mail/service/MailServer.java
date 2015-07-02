@@ -9,7 +9,7 @@ import com.euromoby.social.core.service.NettyService;
 public class MailServer extends NettyService {
 
 	public static final String SERVICE_NAME = "mail";
-	public static final int MAIL_PORT = 26;
+	public static final int MAIL_PORT = 25;
 	
 	@Autowired
 	public MailServer(MailServerInitializer initializer) {
