@@ -1,7 +1,6 @@
-CREATE DATABASE social_agent CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- CREATE DATABASE social_agent CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- DROP TABLE IF EXISTS mail_account;
--- DROP INDEX IF EXISTS mail_account_unique;
 -- DROP TABLE IF EXISTS mail_message;
 -- DROP TABLE IF EXISTS twitter_account;
 -- DROP TABLE IF EXISTS twitter_group;

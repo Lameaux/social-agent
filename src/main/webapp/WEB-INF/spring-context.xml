@@ -15,7 +15,7 @@
     ">
 	<context:component-scan base-package="com.euromoby.social.core" />
 	
-	<context:property-placeholder location="classpath:/com/euromoby/social/config.properties"/>
+	<context:property-placeholder location="classpath:config.properties"/>
 	
 	<bean id="config" class="com.euromoby.social.core.Config">
 		<property name="serverTimeout" value="${mail.timeout}" />
